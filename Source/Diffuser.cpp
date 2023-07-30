@@ -11,10 +11,11 @@
 #include "Diffuser.h"
 #include "utilities.h"
 #include "Hadamard.h"
+#include <random>
 
 using namespace juce;
 
-Diffuser::Diffuser(double length, double sampleRate)
+Diffuser::Diffuser(double length, double sampleRate, int rd)
 {
     printf("length = %f, sR = %f\n", length, sampleRate);
     buffer_length = length*sampleRate + 1;
@@ -30,14 +31,19 @@ Diffuser::Diffuser(double length, double sampleRate)
     delay_channels[1] = delay_channel_two;
     delay_channels[2] = delay_channel_three;
     delay_channels[3] = delay_channel_four;
+    
+    // random number generation. we need 3 seeds from a single random device
+    std::mt19937 gen1(rd);
+    std::mt19937 gen2(rd + 10);
+    std::mt19937 gen3(rd + 20);
         
     // decide how much delay each of the channels should have
     int increment = buffer_length / 4;
-    delay_one = increment;
+    delay_one = increment + getRandomInRange(increment, gen1);
     printf("delay_one length = %d\n", delay_one);
-    delay_two = increment*2;
+    delay_two = increment*2 + getRandomInRange(increment, gen2);
     printf("delay_two length = %d\n", delay_two);
-    delay_three = increment*3;
+    delay_three = increment*3 + getRandomInRange(increment, gen3);
     printf("delay_three length = %d\n", delay_three);
     delay_four = increment*4;
     printf("delay_four length = %d\n", delay_four);

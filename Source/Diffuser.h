@@ -11,13 +11,14 @@
 
 #include "JuceHeader.h"
 #include "Hadamard.h"
+#include <random>
 
 using namespace juce;
 
 class Diffuser {
     
 public:
-    Diffuser(double length, double sampleRate); // length of diffusion in seconds
+    Diffuser(double length, double sampleRate, int rd); // length of diffusion in seconds
     
     double processAndReturnSample(double sample);
     

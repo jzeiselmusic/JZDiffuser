@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "Diffuser.h"
+#include <random>
 //==============================================================================
 /**
 */
@@ -57,6 +58,10 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DiffuserAudioProcessor)
     
-    Diffuser diffuser_left = Diffuser(1.5, 44100.0);
-    Diffuser diffuser_right = Diffuser(1.5, 44100.0);
+    // random seed
+    int seed = 10;
+    
+    // give them the same random generator so each side will sound the same
+    Diffuser diffuser_left = Diffuser(1.0, 44100.0, seed);
+    Diffuser diffuser_right = Diffuser(1.0, 44100.0, seed);
 };
