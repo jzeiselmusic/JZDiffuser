@@ -158,9 +158,17 @@ void DiffuserAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juc
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
             if (channel == 0 ) channelData[sample] =
-                diffuser_left.processAndReturnSample(channelData[sample]);
+                diffuser_left_four.processAndReturnSample(
+                diffuser_left_three.processAndReturnSample(
+                diffuser_left_two.processAndReturnSample(
+                diffuser_left_one.processAndReturnSample(
+                diffuser_left.processAndReturnSample(channelData[sample])))));
             if (channel == 1 ) channelData[sample] =
-                diffuser_right.processAndReturnSample(channelData[sample]);
+                diffuser_right_four.processAndReturnSample(
+                diffuser_right_three.processAndReturnSample(
+                diffuser_right_two.processAndReturnSample(
+                diffuser_right_one.processAndReturnSample(
+                diffuser_right.processAndReturnSample(channelData[sample])))));
         }
     }
 }

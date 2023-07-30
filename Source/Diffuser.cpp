@@ -33,9 +33,10 @@ Diffuser::Diffuser(double length, double sampleRate, int rd)
     delay_channels[3] = delay_channel_four;
     
     // random number generation. we need 3 seeds from a single random device
-    std::mt19937 gen1(rd);
-    std::mt19937 gen2(rd + 10);
-    std::mt19937 gen3(rd + 20);
+    seed = rd;
+    std::mt19937 gen1(seed);
+    std::mt19937 gen2(seed + 10);
+    std::mt19937 gen3(seed + 20);
         
     // decide how much delay each of the channels should have
     int increment = buffer_length / 4;
@@ -94,7 +95,13 @@ void Diffuser::delaySamples(void)
 void Diffuser::invertSamples(void)
 {
     // go through each channels current value and invert them randomly
-    // by randomly, I mean just pick
+    
+    std::mt19937 gen1(seed);
+    
+    for (int i = 0; i < 4; ++i)
+    {
+        audio_buffer[i] *= (double)getRandomMult(gen1);
+    }
 }
 
 void Diffuser::hadamardMatrix(void)

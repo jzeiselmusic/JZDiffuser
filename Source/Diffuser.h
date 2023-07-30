@@ -57,4 +57,7 @@ private:
     
     // the number of samples in the buffer, based on length
     int buffer_length;
+    
+    // this diffuser's random seed
+    int seed;
 };
