@@ -16,30 +16,37 @@ using namespace juce;
 
 Diffuser::Diffuser(double length, double sampleRate)
 {
-    buffer_length = (int)(length*sampleRate + 1.0);
+    printf("length = %f, sR = %f\n", length, sampleRate);
+    buffer_length = length*sampleRate + 1;
+    printf("buffer length = %d\n", buffer_length);
     // we have 4 channels to work with
-    // each channel and delay line needs to be length*sampleRate num samples
-    audio_channels = AudioBuffer<double>(4, buffer_length);
-    delay_channels = AudioBuffer<double>(4, buffer_length);
+    // each delay line needs to be length*sampleRate num samples
+    delay_channel_one = (double*)calloc(buffer_length, sizeof(double));
+    delay_channel_two = (double*)calloc(buffer_length, sizeof(double));
+    delay_channel_three = (double*)calloc(buffer_length, sizeof(double));
+    delay_channel_four = (double*)calloc(buffer_length, sizeof(double));
     
-    // clear to set to all zeroes initiallly
-    audio_channels.clear();
-    delay_channels.clear();
-    
+    delay_channels[0] = delay_channel_one;
+    delay_channels[1] = delay_channel_two;
+    delay_channels[2] = delay_channel_three;
+    delay_channels[3] = delay_channel_four;
+        
     // decide how much delay each of the channels should have
     int increment = buffer_length / 4;
-    delay_one = increment*1;
+    delay_one = increment;
+    printf("delay_one length = %d\n", delay_one);
     delay_two = increment*2;
+    printf("delay_two length = %d\n", delay_two);
     delay_three = increment*3;
+    printf("delay_three length = %d\n", delay_three);
     delay_four = increment*4;
+    printf("delay_four length = %d\n", delay_four);
     
     // start all indexes at 0
     delay_index_one = 0;
     delay_index_two = 0;
     delay_index_three = 0;
     delay_index_four = 0;
-    read_index = 0;
-    write_index = 0;
 }
 
 void Diffuser::addSample(double sample)
@@ -47,10 +54,9 @@ void Diffuser::addSample(double sample)
     /* add sample to current write pointer */
     
     /* go through each channel and add the same input value to all of them */
-    for (int i = 0; i < audio_channels.getNumChannels(); i++)
+    for (int i = 0; i < 4; ++i)
     {
-        auto* write_pointer = audio_channels.getWritePointer(i, write_index);
-        *write_pointer = sample;
+        audio_buffer[i] = sample;
     }
 }
 
@@ -65,19 +71,15 @@ void Diffuser::delaySamples(void)
     
     // increment the delay buffer pointer
     
-    for (int i = 0; i < audio_channels.getNumChannels(); i++)
+    for (int i = 0; i < 4; ++i)
     {
-        auto* read_pointer = audio_channels.getReadPointer(i, read_index);
-        double latest_value = *read_pointer;
+        double latest_value = audio_buffer[i]; // should be the same every pass through
         
-        auto* delay_read_pointer = delay_channels.getReadPointer(i, *(delay_indexes[i]));
-        double current_delay_buffer_value = *delay_read_pointer;
+        double current_delay_buffer_value = delay_channels[i][*(delay_indexes[i])];
         
-        auto* write_pointer = audio_channels.getWritePointer(i, write_index);
-        *write_pointer = current_delay_buffer_value;
+        audio_buffer[i] = current_delay_buffer_value;
         
-        auto* delay_write_pointer = delay_channels.getWritePointer(i, *(delay_indexes[i]));
-        *delay_write_pointer = latest_value;
+        delay_channels[i][*(delay_indexes[i])] = latest_value;
         
         *(delay_indexes[i]) = incrementModulo(*(delay_indexes[i]), *(delay_values[i]));
     }
@@ -87,46 +89,17 @@ void Diffuser::invertSamples(void)
 {
     // go through each channels current value and invert them randomly
     // by randomly, I mean just pick
-    
-    auto* read_pointer_one = audio_channels.getReadPointer(0, read_index);
-    auto* write_pointer_one = audio_channels.getWritePointer(0, write_index);
-    
-    //auto* read_pointer_two = audio_channels.getReadPointer(1, read_index);
-    auto* write_pointer_two = audio_channels.getWritePointer(1, write_index);
-    
-    auto* read_pointer_three = audio_channels.getReadPointer(2, read_index);
-    auto* write_pointer_three = audio_channels.getWritePointer(2, write_index);
-    
-    auto* read_pointer_four = audio_channels.getReadPointer(3, read_index);
-    auto* write_pointer_four = audio_channels.getWritePointer(3, write_index);
-    
-    double temp = *read_pointer_four;
-    double temp_two = *read_pointer_one;
-    
-    *write_pointer_four = *read_pointer_one;
-    
-    *write_pointer_one = -(*read_pointer_three);
-    
-    *write_pointer_two = temp;
-    
-    *write_pointer_three = -temp_two;
 }
 
 void Diffuser::hadamardMatrix(void)
 {
     // make an array of pointers to the current channel values
-    double channels[4] = {  *(audio_channels.getReadPointer(0, read_index)),
-                            *(audio_channels.getReadPointer(1, read_index)),
-                            *(audio_channels.getReadPointer(2, read_index)),
-                            *(audio_channels.getReadPointer(3, read_index)) };
+    double* channels[4] = { &audio_buffer[0],
+                            &audio_buffer[1],
+                            &audio_buffer[2],
+                            &audio_buffer[3] };
     
-    Hadamard<double, 4>::inPlace(channels);
-    
-    for (int i = 0; i < audio_channels.getNumChannels(); i++)
-    {
-        auto* write_pointer = audio_channels.getWritePointer(i, write_index);
-        *write_pointer = channels[i];
-    }
+    hadamard_matrix.inPlaceTransform(channels);
 }
 
 /*
@@ -144,28 +117,12 @@ double Diffuser::processAndReturnSample(double sample)
     
     delaySamples();
     
-    invertSamples();
+    //invertSamples();
     
-    hadamardMatrix();
-    
-    auto* channel_one_output_pointer = audio_channels.getReadPointer(0, read_index);
-    auto* channel_two_output_pointer = audio_channels.getReadPointer(1, read_index);
-    auto* channel_three_output_pointer = audio_channels.getReadPointer(2, read_index);
-    auto* channel_four_output_pointer = audio_channels.getReadPointer(3, read_index);
-    
-    double channel_one_output_value = *channel_one_output_pointer;
-    double channel_two_output_value = *channel_two_output_pointer;
-    double channel_three_output_value = *channel_three_output_pointer;
-    double channel_four_output_value = *channel_four_output_pointer;
+    //hadamardMatrix();
     
     /* output is the sum of the multichannel matrix */
-    double output_value =   (channel_one_output_value + channel_two_output_value + channel_three_output_value + channel_four_output_value) / 4.0;
-    
-    /* make sure to increment the read pointer now, modulo the length of the buffer */
-    read_index = incrementModulo(read_index, buffer_length);
-    
-    /* make sure to increment the write index */
-    write_index = incrementModulo(write_index, buffer_length);
+    double output_value =   audio_buffer[0] + audio_buffer[1] + audio_buffer[2] + audio_buffer[3];
     
     return output_value;
 }

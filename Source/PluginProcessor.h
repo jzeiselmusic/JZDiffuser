@@ -57,6 +57,6 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DiffuserAudioProcessor)
     
-    Diffuser diffuser_left = Diffuser(1.5, getSampleRate());
-    Diffuser diffuser_right = Diffuser(1.5, getSampleRate());
+    Diffuser diffuser_left = Diffuser(1.5, 44100.0);
+    Diffuser diffuser_right = Diffuser(1.5, 44100.0);
 };
