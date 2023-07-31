@@ -54,6 +54,15 @@ Diffuser::Diffuser(double length, double sampleRate, int rd)
     delay_index_two = 0;
     delay_index_three = 0;
     delay_index_four = 0;
+    
+    // make the inverter from the random seed
+    // if two diffusers have the same seed, they will have the same inversions
+    std::mt19937 gen4(seed);
+    
+    for (int i = 0; i < 4; ++i)
+    {
+        inverter[i] = getRandomMult(gen1);
+    }
 }
 
 void Diffuser::addSample(double sample)
@@ -95,12 +104,9 @@ void Diffuser::delaySamples(void)
 void Diffuser::invertSamples(void)
 {
     // go through each channels current value and invert them randomly
-    
-    std::mt19937 gen1(seed);
-    
     for (int i = 0; i < 4; ++i)
     {
-        audio_buffer[i] *= (double)getRandomMult(gen1);
+        audio_buffer[i] *= inverter[i];
     }
 }
 
@@ -130,7 +136,7 @@ double Diffuser::processAndReturnSample(double sample)
     
     delaySamples();
     
-    //invertSamples();
+    invertSamples();
     
     //hadamardMatrix();
     

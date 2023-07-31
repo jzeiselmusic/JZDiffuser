@@ -60,4 +60,8 @@ private:
     
     // this diffuser's random seed
     int seed;
+    
+    // this is the 4-channel inverter made randomly
+    // start it with all non-inversions
+    int inverter[4] = {1, 1, 1, 1};
 };
