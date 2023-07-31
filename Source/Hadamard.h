@@ -10,17 +10,17 @@
 
 #pragma once
 
-class Hadamard {
+class Householder {
     
 public:
-    Hadamard(int size); // in our case always has to be 4x4
+    Householder(int size); // in our case always has to be 4x4
     
-    void inPlaceTransform(double** current_values);
+    void inPlaceTransform(double* current_values);
     
 private:
-    int hadamard_size; // should always equal num channels
-    double matrix[4][4] { {1.0, 1.0, 1.0, 1.0},
-                          {1.0,-1.0, 1.0,-1.0},
-                          {1.0, 1.0,-1.0,-1.0},
-                          {1.0,-1.0,-1.0, 1.0} };
+    int householder_size; // should always equal num channels
+    double matrix[4][4] { { 1.0,-1.0,-1.0,-1.0},
+                          {-1.0, 1.0,-1.0,-1.0},
+                          {-1.0,-1.0, 1.0,-1.0},
+                          {-1.0,-1.0,-1.0, 1.0} };
 };

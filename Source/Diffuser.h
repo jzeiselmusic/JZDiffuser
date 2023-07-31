@@ -38,7 +38,7 @@ private:
     double* delay_channels[4] = {NULL, NULL, NULL, NULL};
     
     // declare the hadamard object we will use
-    Hadamard hadamard_matrix = Hadamard(4);
+    Householder householder_matrix = Householder(4);
     
     // amount of delay for each channel
     // should be random

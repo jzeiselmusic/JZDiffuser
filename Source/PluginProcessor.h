@@ -59,21 +59,21 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DiffuserAudioProcessor)
     
     // random seed
-    int seed = 10;
+    int seed = rand()%100;
     
     // give them the same random generator so each side will sound the same
-    Diffuser diffuser_left = Diffuser(.07, 44100.0, seed);
-    Diffuser diffuser_right = Diffuser(.07, 44100.0, seed);
+    Diffuser diffuser_left = Diffuser(.01, 44100.0, seed);
+    Diffuser diffuser_right = Diffuser(.01, 44100.0, seed);
     
-    Diffuser diffuser_left_one = Diffuser(.14, 44100.0, seed+1);
-    Diffuser diffuser_right_one = Diffuser(.14, 44100.0, seed+1);
+    Diffuser diffuser_left_one = Diffuser(.09, 44100.0, seed+1);
+    Diffuser diffuser_right_one = Diffuser(.09, 44100.0, seed+1);
     
-    Diffuser diffuser_left_two = Diffuser(.28, 44100.0, seed+2);
-    Diffuser diffuser_right_two = Diffuser(.28, 44100.0, seed+2);
+    Diffuser diffuser_left_two = Diffuser(.11, 44100.0, seed+2);
+    Diffuser diffuser_right_two = Diffuser(.11, 44100.0, seed+2);
     
-    Diffuser diffuser_left_three = Diffuser(.56, 44100.0, seed+3);
-    Diffuser diffuser_right_three = Diffuser(.56, 44100.0, seed+3);
+    Diffuser diffuser_left_three = Diffuser(.15, 44100.0, seed+3);
+    Diffuser diffuser_right_three = Diffuser(.15, 44100.0, seed+3);
     
-    Diffuser diffuser_left_four = Diffuser(1.12, 44100.0, seed+4);
-    Diffuser diffuser_right_four = Diffuser(1.12, 44100.0, seed+4);
+    Diffuser diffuser_left_four = Diffuser(.2, 44100.0, seed+4);
+    Diffuser diffuser_right_four = Diffuser(.2, 44100.0, seed+4);
 };

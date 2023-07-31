@@ -112,13 +112,7 @@ void Diffuser::invertSamples(void)
 
 void Diffuser::hadamardMatrix(void)
 {
-    // make an array of pointers to the current channel values
-    double* channels[4] = { &audio_buffer[0],
-                            &audio_buffer[1],
-                            &audio_buffer[2],
-                            &audio_buffer[3] };
-    
-    hadamard_matrix.inPlaceTransform(channels);
+    householder_matrix.inPlaceTransform(audio_buffer);
 }
 
 /*
@@ -138,10 +132,10 @@ double Diffuser::processAndReturnSample(double sample)
     
     invertSamples();
     
-    //hadamardMatrix();
+    hadamardMatrix();
     
     /* output is the sum of the multichannel matrix */
-    double output_value =   audio_buffer[0] + audio_buffer[1] + audio_buffer[2] + audio_buffer[3];
+    double output_value =   audio_buffer[0] + audio_buffer[1];// + audio_buffer[2] + audio_buffer[3];
     
     return output_value;
 }

@@ -10,37 +10,34 @@
 
 #include "Hadamard.h"
 
-Hadamard::Hadamard(int size)
+Householder::Householder(int size)
 {
-    hadamard_size = size;
+    householder_size = size;
 }
 
-void Hadamard::inPlaceTransform(double **current_values)
+void Householder::inPlaceTransform(double* current_values)
 {
     // input is an array of pointers to each channel's current value
     
     // we want to do a matrix multiplication with our hadamard matrix
     // and then put the result back in the current values matrix
     
-    double output_val_one = 0.0;
-    double output_val_two = 0.0;
-    double output_val_three = 0.0;
-    double output_val_four = 0.0;
-    
-    double* output_vals[4] = {&output_val_one, &output_val_two, &output_val_three, &output_val_four};
+    double output_vals[4] = {0, 0, 0, 0};
     
     // dot products of 1x4 and 4x4 matrices
-    for (int i = 0; i < hadamard_size; ++i)
+    for (int i = 0; i < householder_size; ++i)
     {
-        for (int j = 0; j < hadamard_size; ++j)
+        for (int j = 0; j < householder_size; ++j)
         {
-            *(output_vals[i]) += matrix[i][j] * (*(current_values[j]));
+            output_vals[i] += matrix[i][j] * current_values[j];
         }
+        // now scale by 1/4
+        output_vals[i] *= 0.5;
     }
     
     // put the output vals into the current vals
-    for (int i = 0; i < hadamard_size; ++i)
+    for (int i = 0; i < householder_size; ++i)
     {
-        *(current_values[i]) = *(output_vals[i]);
+        current_values[i] = output_vals[i];
     }
 }
