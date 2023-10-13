@@ -5,13 +5,13 @@
               companyName="JZ">
   <MAINGROUP id="r8xq34" name="Diffuser">
     <GROUP id="{4E0E00B5-715E-9ECB-6E4F-0373D9B18506}" name="Source">
+      <FILE id="acI2S6" name="FDN.cpp" compile="1" resource="0" file="Source/FDN.cpp"/>
+      <FILE id="TsUhvd" name="FDN.h" compile="0" resource="0" file="Source/FDN.h"/>
       <FILE id="y3Pq4i" name="utilities.h" compile="0" resource="0" file="Source/utilities.h"/>
       <GROUP id="{D82C7DBC-8812-9323-1B55-3FE81F3F5263}" name="Diffuser_Objects">
         <GROUP id="{71451EEE-5196-22B1-E949-FD6D56359636}" name="Components">
           <FILE id="eBaU6x" name="Hadamard.cpp" compile="1" resource="0" file="Source/Hadamard.cpp"/>
           <FILE id="UTDybY" name="Hadamard.h" compile="0" resource="0" file="Source/Hadamard.h"/>
-          <FILE id="IRiJxV" name="Inverter.cpp" compile="1" resource="0" file="Source/Inverter.cpp"/>
-          <FILE id="UBCncy" name="Inverter.h" compile="0" resource="0" file="Source/Inverter.h"/>
           <FILE id="U5IFfo" name="Delayer.cpp" compile="1" resource="0" file="Source/Delayer.cpp"/>
           <FILE id="JkHjzT" name="Delayer.h" compile="0" resource="0" file="Source/Delayer.h"/>
         </GROUP>

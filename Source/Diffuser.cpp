@@ -135,7 +135,7 @@ double Diffuser::processAndReturnSample(double sample)
     hadamardMatrix();
     
     /* output is the sum of the multichannel matrix */
-    double output_value =   audio_buffer[0] + audio_buffer[1];// + audio_buffer[2] + audio_buffer[3];
+    double output_value =   audio_buffer[0] + audio_buffer[1] + audio_buffer[2] + audio_buffer[3];
     
     return output_value;
 }
