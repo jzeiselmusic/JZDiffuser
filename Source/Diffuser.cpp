@@ -15,11 +15,9 @@
 
 using namespace juce;
 
-Diffuser::Diffuser(double length, double sampleRate, int rd)
+Diffuser::Diffuser(double length, double sampleRate, int rd_seed)
 {
-    printf("length = %f, sR = %f\n", length, sampleRate);
     buffer_length = length*sampleRate + 1;
-    printf("buffer length = %d\n", buffer_length);
     // we have 4 channels to work with
     // each delay line needs to be length*sampleRate num samples
     delay_channel_one = (double*)calloc(buffer_length, sizeof(double));
@@ -33,7 +31,7 @@ Diffuser::Diffuser(double length, double sampleRate, int rd)
     delay_channels[3] = delay_channel_four;
     
     // random number generation. we need 3 seeds from a single random device
-    seed = rd;
+    seed = rd_seed;
     std::mt19937 gen1(seed);
     std::mt19937 gen2(seed + 10);
     std::mt19937 gen3(seed + 20);
@@ -41,14 +39,10 @@ Diffuser::Diffuser(double length, double sampleRate, int rd)
     // decide how much delay each of the channels should have
     int increment = buffer_length / 4;
     delay_one = increment + getRandomInRange(increment, gen1);
-    printf("delay_one length = %d\n", delay_one);
     delay_two = increment*2 + getRandomInRange(increment, gen2);
-    printf("delay_two length = %d\n", delay_two);
     delay_three = increment*3 + getRandomInRange(increment, gen3);
-    printf("delay_three length = %d\n", delay_three);
     delay_four = increment*4;
-    printf("delay_four length = %d\n", delay_four);
-    
+
     // start all indexes at 0
     delay_index_one = 0;
     delay_index_two = 0;
@@ -123,10 +117,6 @@ void Diffuser::hadamardMatrix(void)
 double Diffuser::processAndReturnSample(double sample)
 {
     addSample(sample);
-    
-    //
-    // do processing here
-    //
     
     delaySamples();
     

@@ -18,7 +18,7 @@ using namespace juce;
 class Diffuser {
     
 public:
-    Diffuser(double length, double sampleRate, int rd); // length of diffusion in seconds
+    Diffuser(double length, double sampleRate, int rd_seed); // length of diffusion in seconds
     
     double processAndReturnSample(double sample);
     
