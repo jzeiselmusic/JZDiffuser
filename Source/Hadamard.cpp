@@ -29,7 +29,7 @@ void Householder::inPlaceTransform(double* current_values)
     {
         for (int j = 0; j < householder_size; ++j)
         {
-            output_vals[i] += matrix[i][j] * current_values[j];
+            output_vals[i] += matrix_four[i][j] * current_values[j];
         }
         // now scale by 1/4
         output_vals[i] *= 0.5;
@@ -40,4 +40,11 @@ void Householder::inPlaceTransform(double* current_values)
     {
         current_values[i] = output_vals[i];
     }
+}
+
+std::vector<std::vector<double>> Householder::createHouseholder(<#int size#>)
+{
+    /* create and return a dynamic vector that is a square householder matrix */
+    
+    return (std::vector<std::vector<double>>)NULL;
 }
