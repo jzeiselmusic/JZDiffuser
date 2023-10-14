@@ -15,30 +15,38 @@
 
 using namespace juce;
 
-Diffuser::Diffuser(double length, double sampleRate, int rd_seed)
+Diffuser::Diffuser(double length, int size, double sampleRate, int rd_seed)
 {
     
-    this->delay_module = new Delayer(length, 4, sampleRate, rd_seed);
+    this->delay_module = new Delayer(length, size, sampleRate, rd_seed);
     
-    for (int i = 0; i < 4; ++i)
+    this->size = size;
+    
+    for (int i = 0; i < size; ++i)
     {
         std::mt19937 temp(rd_seed);
-        inverter[i] = getRandomMult(temp);
+        inverter.push_back(getRandomMult(temp));
     }
+    
+    /* set the audio buffer to all zeros */
+    audio_buffer.push_back(size);
+    std::fill(audio_buffer.begin(), audio_buffer.end(), 0.0);
+    
+    this->householder_matrix = new Householder(size);
 }
 
-void Diffuser::invertSamples(void)
+void Diffuser::invertSamples(std::vector<double>* buffer)
 {
     // go through each channels current value and invert them randomly
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < this->size; ++i)
     {
-        audio_buffer[i] *= inverter[i];
+        buffer->at(i) *= inverter[i];
     }
 }
 
-void Diffuser::hadamardMatrix(void)
+void Diffuser::hadamardTransform(std::vector<double>* buffer)
 {
-    householder_matrix.inPlaceTransform(audio_buffer);
+    householder_matrix->inPlaceTransform(buffer);
 }
 
 /*
@@ -48,21 +56,20 @@ void Diffuser::hadamardMatrix(void)
 */
 double Diffuser::processAndReturnSample(double sample)
 {
-    delay_module->process(sample);
+    /*delay_module->process(sample);
     
     std::vector<double> output = delay_module->getSamples();
     
-    for (int i = 0; i < 4; ++i)
-    {
-        audio_buffer[i] = output[i];
-    }
+    invertSamples(&output);
     
-    invertSamples();
-    
-    hadamardMatrix();
+    hadamardTransform(&output);*/
     
     /* output is the sum of the multichannel matrix */
-    double output_value =   audio_buffer[0] + audio_buffer[1] + audio_buffer[2] + audio_buffer[3];
+    double output_sample = 0.0;
+    /*for (int i = 0; i < this->size; ++i)
+    {
+        output_sample += output[i];
+    }*/
     
-    return output_value;
+    return output_sample;
 }

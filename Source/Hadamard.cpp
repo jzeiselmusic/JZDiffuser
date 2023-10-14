@@ -13,23 +13,27 @@
 Householder::Householder(int size)
 {
     householder_size = size;
+    
+    this->my_matrix = createHouseholder(size);
 }
 
-void Householder::inPlaceTransform(double* current_values)
+void Householder::inPlaceTransform(std::vector<double>* buffer)
 {
     // input is an array of pointers to each channel's current value
     
     // we want to do a matrix multiplication with our hadamard matrix
     // and then put the result back in the current values matrix
     
-    double output_vals[4] = {0, 0, 0, 0};
+    std::vector<double> output_vals;
+    output_vals.push_back(this->householder_size);
+    std::fill(output_vals.begin(), output_vals.end(), 0.0);
     
-    // dot products of 1x4 and 4x4 matrices
+    // dot products
     for (int i = 0; i < householder_size; ++i)
     {
         for (int j = 0; j < householder_size; ++j)
         {
-            output_vals[i] += matrix_four[i][j] * current_values[j];
+            output_vals[i] += my_matrix[i][j] * buffer->at(j);
         }
         // now scale by 1/4
         output_vals[i] *= 0.5;
@@ -38,13 +42,40 @@ void Householder::inPlaceTransform(double* current_values)
     // put the output vals into the current vals
     for (int i = 0; i < householder_size; ++i)
     {
-        current_values[i] = output_vals[i];
+        buffer->at(i) = output_vals[i];
     }
 }
 
-std::vector<std::vector<double>> Householder::createHouseholder(<#int size#>)
+std::vector<std::vector<double>> Householder::createHouseholder(int size)
 {
     /* create and return a dynamic vector that is a square householder matrix */
     
-    return (std::vector<std::vector<double>>)NULL;
+    /* create the empty matrix */
+    std::vector<std::vector<double>> temp;
+    for (int i = 0; i < size; ++i)
+    {
+        std::vector<double> temp_a;
+        for (int j = 0; j < size; ++j)
+        {
+            temp_a.push_back(0.0);
+        }
+        temp.push_back(temp_a);
+    }
+    
+    for (int i = 0; i < size; ++i)
+    {
+        for (int j = 0; j < size; ++j)
+        {
+            if (i == j)
+            {
+                temp[i][j] = 1.0 - (2.0 / (double)size);
+            }
+            else
+            {
+                temp[i][j] = 0.0 - (2.0 / (double)size);
+            }
+        }
+    }
+    
+    return temp;
 }

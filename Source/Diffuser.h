@@ -19,28 +19,30 @@ using namespace juce;
 class Diffuser {
     
 public:
-    Diffuser(double length, double sampleRate, int rd_seed); // length of diffusion in seconds
+    Diffuser(double length, int size, double sampleRate, int rd_seed); // length of diffusion in seconds
     
     double processAndReturnSample(double sample);
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Diffuser);
     
-    void invertSamples(void); // second part is a multichannel inverter and/or swapper
-    void hadamardMatrix(void); // third part is pass multiple channels through a hadamard matrix
+    void invertSamples(std::vector<double>*); // second part is a multichannel inverter and/or swapper
+    void hadamardTransform(std::vector<double>*); // third part is pass multiple channels through a hadamard matrix
     
     int random_seed;
+    
+    int size;
     
     // declare a delay module
     // but dont initialize until we have been given a random seed
     Delayer* delay_module;
     
-    double audio_buffer[4] = {0.0,0.0,0.0,0.0};
+    std::vector<double> audio_buffer;
     
     // declare the hadamard object we will use
-    Householder householder_matrix = Householder(4);
+    Householder* householder_matrix;
     
     // this is the 4-channel inverter made randomly
     // start it with all non-inversions
-    int inverter[4] = {1, 1, 1, 1};
+    std::vector<int> inverter;
 };
