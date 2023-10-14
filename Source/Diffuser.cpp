@@ -17,81 +17,13 @@ using namespace juce;
 
 Diffuser::Diffuser(double length, double sampleRate, int rd_seed)
 {
-    buffer_length = length*sampleRate + 1;
-    // we have 4 channels to work with
-    // each delay line needs to be length*sampleRate num samples
-    delay_channel_one = (double*)calloc(buffer_length, sizeof(double));
-    delay_channel_two = (double*)calloc(buffer_length, sizeof(double));
-    delay_channel_three = (double*)calloc(buffer_length, sizeof(double));
-    delay_channel_four = (double*)calloc(buffer_length, sizeof(double));
     
-    delay_channels[0] = delay_channel_one;
-    delay_channels[1] = delay_channel_two;
-    delay_channels[2] = delay_channel_three;
-    delay_channels[3] = delay_channel_four;
-    
-    // random number generation. we need 3 seeds from a single random device
-    seed = rd_seed;
-    std::mt19937 gen1(seed);
-    std::mt19937 gen2(seed + 10);
-    std::mt19937 gen3(seed + 20);
-        
-    // decide how much delay each of the channels should have
-    int increment = buffer_length / 4;
-    delay_one = increment + getRandomInRange(increment, gen1);
-    delay_two = increment*2 + getRandomInRange(increment, gen2);
-    delay_three = increment*3 + getRandomInRange(increment, gen3);
-    delay_four = increment*4;
-
-    // start all indexes at 0
-    delay_index_one = 0;
-    delay_index_two = 0;
-    delay_index_three = 0;
-    delay_index_four = 0;
-    
-    // make the inverter from the random seed
-    // if two diffusers have the same seed, they will have the same inversions
-    std::mt19937 gen4(seed);
+    this->delay_module = new Delayer(length, 4, sampleRate, rd_seed);
     
     for (int i = 0; i < 4; ++i)
     {
-        inverter[i] = getRandomMult(gen1);
-    }
-}
-
-void Diffuser::addSample(double sample)
-{
-    /* add sample to current write pointer */
-    
-    /* go through each channel and add the same input value to all of them */
-    for (int i = 0; i < 4; ++i)
-    {
-        audio_buffer[i] = sample;
-    }
-}
-
-void Diffuser::delaySamples(void)
-{
-    // first we read the latest sample that was just added from the channel buffer
-    
-    // then we read the value from the current delay buffer
-    // and put that value in the corresponding channel
-    
-    // then we put the latest channel sample into the delay buffer
-    
-    // increment the delay buffer pointer
-    
-    for (int i = 0; i < 4; ++i)
-    {
-        double latest_value = audio_buffer[i]; // should be the same every pass through
-        
-        double current_delay_buffer_value = delay_channels[i][*(delay_indexes[i])];
-        
-        audio_buffer[i] = current_delay_buffer_value;
-        
-        delay_channels[i][*(delay_indexes[i])] = latest_value;
-        
-        *(delay_indexes[i]) = incrementModulo(*(delay_indexes[i]), *(delay_values[i]));
+        std::mt19937 temp(rd_seed);
+        inverter[i] = getRandomMult(temp);
     }
 }
 
@@ -116,9 +48,14 @@ void Diffuser::hadamardMatrix(void)
 */
 double Diffuser::processAndReturnSample(double sample)
 {
-    addSample(sample);
+    delay_module->process(sample);
     
-    delaySamples();
+    std::vector<double> output = delay_module->getSamples();
+    
+    for (int i = 0; i < 4; ++i)
+    {
+        audio_buffer[i] = output[i];
+    }
     
     invertSamples();
     

@@ -11,12 +11,12 @@
 #pragma once
 #include <random>
 
-int incrementModulo(const int current_value, const int max_length)
+inline int incrementModulo(const int current_value, const int max_length)
 {
     return current_value + 1 >= max_length ? 0 : current_value + 1;
 }
 
-int getRandomMult(std::mt19937 gen)
+inline int getRandomMult(std::mt19937 gen)
 {
     // return either 1 or -1
     
@@ -27,7 +27,7 @@ int getRandomMult(std::mt19937 gen)
     return (randomMult == 0) ? -1 : 1;
 }
 
-int getRandomInRange(int maxValue, std::mt19937 gen)
+inline int getRandomInRange(int maxValue, std::mt19937 gen)
 {
     // return a random number between -(maxValue/2) to (maxValue/2)
 

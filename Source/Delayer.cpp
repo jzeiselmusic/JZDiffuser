@@ -17,6 +17,12 @@ using namespace juce;
 Delayer::Delayer(double length, int num_channels,
                  double sampleRate, int rd_seed)
 {
+    /* create the input and output buffers */
+    for (int i = 0; i < num_channels; ++i)
+    {
+        input_audio_buffer.push_back(0.0);
+        output_audio_buffer.push_back(0.0);
+    }
     
     /* constructor for a multi-channel delay module */
     this->buffer_length = length*sampleRate + 1;
@@ -89,7 +95,7 @@ void Delayer::process(double sample)
     delaySamples();
 }
 
-double Delayer::processAndReturnSample(double sample)
+double Delayer::processAndReturnOneSample(double sample)
 {
     addSample(sample);
     

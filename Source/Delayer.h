@@ -23,7 +23,7 @@ public:
     
     void process(double sample);
     std::vector<double> getSamples(void);
-    double processAndReturnSample(double sample);
+    double processAndReturnOneSample(double sample);
     
     
 private:
