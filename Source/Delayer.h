@@ -22,7 +22,7 @@ public:
             double sampleRate, int rd_seed);
     
     void process(double sample);
-    std::vector<double> getSamples(void);
+    std::vector<double>* getSamples(void);
     double processAndReturnOneSample(double sample);
     
     

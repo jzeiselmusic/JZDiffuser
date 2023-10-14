@@ -13,8 +13,7 @@
 Householder::Householder(int size)
 {
     householder_size = size;
-    
-    this->my_matrix = createHouseholder(size);
+    my_matrix = createHouseholder(size);
 }
 
 void Householder::inPlaceTransform(std::vector<double>* buffer)
@@ -24,8 +23,7 @@ void Householder::inPlaceTransform(std::vector<double>* buffer)
     // we want to do a matrix multiplication with our hadamard matrix
     // and then put the result back in the current values matrix
     
-    std::vector<double> output_vals;
-    output_vals.push_back(this->householder_size);
+    std::vector<double> output_vals(this->householder_size);
     std::fill(output_vals.begin(), output_vals.end(), 0.0);
     
     // dot products
@@ -52,6 +50,7 @@ std::vector<std::vector<double>> Householder::createHouseholder(int size)
     
     /* create the empty matrix */
     std::vector<std::vector<double>> temp;
+    
     for (int i = 0; i < size; ++i)
     {
         std::vector<double> temp_a;

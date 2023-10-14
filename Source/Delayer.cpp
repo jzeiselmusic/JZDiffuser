@@ -111,8 +111,8 @@ double Delayer::processAndReturnOneSample(double sample)
     return total / (double)num_channels;
 }
 
-std::vector<double> Delayer::getSamples()
+std::vector<double>* Delayer::getSamples()
 {
-    return this->output_audio_buffer;
+    return &output_audio_buffer;
 }
 

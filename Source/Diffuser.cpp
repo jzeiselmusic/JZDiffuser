@@ -29,7 +29,7 @@ Diffuser::Diffuser(double length, int size, double sampleRate, int rd_seed)
     }
     
     /* set the audio buffer to all zeros */
-    audio_buffer.push_back(size);
+    audio_buffer.resize(size);
     std::fill(audio_buffer.begin(), audio_buffer.end(), 0.0);
     
     this->householder_matrix = new Householder(size);
@@ -56,20 +56,20 @@ void Diffuser::hadamardTransform(std::vector<double>* buffer)
 */
 double Diffuser::processAndReturnSample(double sample)
 {
-    /*delay_module->process(sample);
+    delay_module->process(sample);
     
-    std::vector<double> output = delay_module->getSamples();
+    std::vector<double>* output = delay_module->getSamples();
     
-    invertSamples(&output);
+    invertSamples(output);
     
-    hadamardTransform(&output);*/
+    hadamardTransform(output);
     
     /* output is the sum of the multichannel matrix */
     double output_sample = 0.0;
-    /*for (int i = 0; i < this->size; ++i)
+    for (int i = 0; i < this->size; ++i)
     {
-        output_sample += output[i];
-    }*/
+        output_sample += output->at(i);
+    }
     
     return output_sample;
 }
