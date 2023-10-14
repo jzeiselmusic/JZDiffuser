@@ -2,7 +2,7 @@
   ==============================================================================
 
     Hadamard.cpp
-    Created: 29 Jul 2023 2:39:27pm
+    Created: 14 Oct 2023 1:29:42pm
     Author:  Jacob Zeisel
 
   ==============================================================================
@@ -10,71 +10,48 @@
 
 #include "Hadamard.h"
 
-Householder::Householder(int size)
+Hadamard::Hadamard(int size)
 {
-    householder_size = size;
-    my_matrix = createHouseholder(size);
+    hadamard_size = size;
+    
+    if (size != 4 && size != 8 && size != 16)
+    {
+        throw std::runtime_error("can only be 4,8,or 16 channels");
+    }
 }
 
-void Householder::inPlaceTransform(std::vector<double>* buffer)
+void Hadamard::inPlaceTransform(std::vector<double> *buffer)
 {
-    // input is an array of pointers to each channel's current value
-    
-    // we want to do a matrix multiplication with our hadamard matrix
-    // and then put the result back in the current values matrix
-    
-    std::vector<double> output_vals(this->householder_size);
+    std::vector<double> output_vals(hadamard_size);
     std::fill(output_vals.begin(), output_vals.end(), 0.0);
     
     // dot products
-    for (int i = 0; i < householder_size; ++i)
+    for (int i = 0; i < hadamard_size; ++i)
     {
-        for (int j = 0; j < householder_size; ++j)
+        for (int j = 0; j < hadamard_size; ++j)
         {
-            output_vals[i] += my_matrix[i][j] * buffer->at(j);
+            switch(hadamard_size)
+            {
+                case 4:
+                    output_vals[i] += hadamard_four[i][j] * buffer->at(j);
+                    break;
+                case 8:
+                    output_vals[i] += hadamard_eight[i][j] * buffer->at(j);
+                    break;
+                case 16:
+                    output_vals[i] += hadamard_sixteen[i][j] * buffer->at(j);
+                    break;
+                default:
+                    throw std::runtime_error("can only be 4,8,or 16 channels");
+            }
         }
-        // now scale by 1/4
-        output_vals[i] *= 0.5;
+        // now scale
+        output_vals[i] *= (1.0 / sqrt((double)hadamard_size));
     }
     
     // put the output vals into the current vals
-    for (int i = 0; i < householder_size; ++i)
+    for (int i = 0; i < hadamard_size; ++i)
     {
         buffer->at(i) = output_vals[i];
     }
-}
-
-std::vector<std::vector<double>> Householder::createHouseholder(int size)
-{
-    /* create and return a dynamic vector that is a square householder matrix */
-    
-    /* create the empty matrix */
-    std::vector<std::vector<double>> temp;
-    
-    for (int i = 0; i < size; ++i)
-    {
-        std::vector<double> temp_a;
-        for (int j = 0; j < size; ++j)
-        {
-            temp_a.push_back(0.0);
-        }
-        temp.push_back(temp_a);
-    }
-    
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = 0; j < size; ++j)
-        {
-            if (i == j)
-            {
-                temp[i][j] = 1.0 - (2.0 / (double)size);
-            }
-            else
-            {
-                temp[i][j] = 0.0 - (2.0 / (double)size);
-            }
-        }
-    }
-    
-    return temp;
 }

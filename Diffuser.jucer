@@ -10,8 +10,10 @@
       <FILE id="y3Pq4i" name="utilities.h" compile="0" resource="0" file="Source/utilities.h"/>
       <GROUP id="{D82C7DBC-8812-9323-1B55-3FE81F3F5263}" name="Diffuser_Objects">
         <GROUP id="{71451EEE-5196-22B1-E949-FD6D56359636}" name="Components">
-          <FILE id="eBaU6x" name="Hadamard.cpp" compile="1" resource="0" file="Source/Hadamard.cpp"/>
-          <FILE id="UTDybY" name="Hadamard.h" compile="0" resource="0" file="Source/Hadamard.h"/>
+          <FILE id="cDfwhK" name="Hadamard.h" compile="0" resource="0" file="Source/Hadamard.h"/>
+          <FILE id="qFxKuM" name="Hadamard.cpp" compile="1" resource="0" file="Source/Hadamard.cpp"/>
+          <FILE id="eBaU6x" name="Householder.cpp" compile="1" resource="0" file="Source/Householder.cpp"/>
+          <FILE id="UTDybY" name="Householder.h" compile="0" resource="0" file="Source/Householder.h"/>
           <FILE id="U5IFfo" name="Delayer.cpp" compile="1" resource="0" file="Source/Delayer.cpp"/>
           <FILE id="JkHjzT" name="Delayer.h" compile="0" resource="0" file="Source/Delayer.h"/>
         </GROUP>

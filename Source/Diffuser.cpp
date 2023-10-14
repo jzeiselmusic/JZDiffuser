@@ -10,7 +10,7 @@
 
 #include "Diffuser.h"
 #include "utilities.h"
-#include "Hadamard.h"
+#include "Householder.h"
 #include <random>
 
 using namespace juce;
@@ -32,7 +32,7 @@ Diffuser::Diffuser(double length, int size, double sampleRate, int rd_seed)
     audio_buffer.resize(size);
     std::fill(audio_buffer.begin(), audio_buffer.end(), 0.0);
     
-    this->householder_matrix = new Householder(size);
+    this->hadamard_matrix = new Hadamard(size);
 }
 
 void Diffuser::invertSamples(std::vector<double>* buffer)
@@ -42,11 +42,6 @@ void Diffuser::invertSamples(std::vector<double>* buffer)
     {
         buffer->at(i) *= inverter[i];
     }
-}
-
-void Diffuser::hadamardTransform(std::vector<double>* buffer)
-{
-    householder_matrix->inPlaceTransform(buffer);
 }
 
 /*
@@ -62,7 +57,7 @@ double Diffuser::processAndReturnSample(double sample)
     
     invertSamples(output);
     
-    hadamardTransform(output);
+    hadamard_matrix->inPlaceTransform(output);
     
     /* output is the sum of the multichannel matrix */
     double output_sample = 0.0;

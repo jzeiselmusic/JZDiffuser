@@ -38,7 +38,7 @@ private:
     
     std::vector<double> output_audio_buffer;
     
-    std::vector<double*> delay_channels; // dynamic array that holds the delay channels
+    std::vector<std::vector<double>> delay_channels; // dynamic array that holds the delay channels
     
     std::vector<int> delay_amounts; // amount of delay for each channel
     

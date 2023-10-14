@@ -62,18 +62,18 @@ private:
     int seed = rand()%100;
     
     // give them the same random generator so each side will sound the same
-    Diffuser diffuser_left = Diffuser(.01, 4, 44100.0, seed);
-    Diffuser diffuser_right = Diffuser(.01, 4, 44100.0, seed);
+    Diffuser diffuser_left = Diffuser(.01, 8, 44100.0, seed);
+    Diffuser diffuser_right = Diffuser(.01, 8, 44100.0, seed);
     
-    Diffuser diffuser_left_one = Diffuser(.09, 4, 44100.0, seed+1);
-    Diffuser diffuser_right_one = Diffuser(.09, 4, 44100.0, seed+1);
+    Diffuser diffuser_left_one = Diffuser(.03, 8, 44100.0, seed+1);
+    Diffuser diffuser_right_one = Diffuser(.03, 8, 44100.0, seed+1);
     
-    Diffuser diffuser_left_two = Diffuser(.11, 4, 44100.0, seed+2);
-    Diffuser diffuser_right_two = Diffuser(.11, 4, 44100.0, seed+2);
+    Diffuser diffuser_left_two = Diffuser(.05, 8, 44100.0, seed+2);
+    Diffuser diffuser_right_two = Diffuser(.05, 8, 44100.0, seed+2);
     
-    Diffuser diffuser_left_three = Diffuser(.15, 4, 44100.0, seed+3);
-    Diffuser diffuser_right_three = Diffuser(.15, 4, 44100.0, seed+3);
+    Diffuser diffuser_left_three = Diffuser(.09, 8, 44100.0, seed+3);
+    Diffuser diffuser_right_three = Diffuser(.09, 8, 44100.0, seed+3);
     
-    Diffuser diffuser_left_four = Diffuser(.2, 4, 44100.0, seed+4);
-    Diffuser diffuser_right_four = Diffuser(.2, 4, 44100.0, seed+4);
+    Diffuser diffuser_left_four = Diffuser(.1, 4, 44100.0, seed+4);
+    Diffuser diffuser_right_four = Diffuser(.1, 4, 44100.0, seed+4);
 };

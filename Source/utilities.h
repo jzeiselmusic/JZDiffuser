@@ -29,16 +29,14 @@ inline int getRandomMult(std::mt19937 gen)
 
 inline int getRandomInRange(int maxValue, std::mt19937 gen)
 {
-    // return a random number between -(maxValue/2) to (maxValue/2)
-
-    int multiplier = getRandomMult(gen);
+    // return a random number between 0 to maxValue
     
-    // Define new distribution between 0 and maxValue/2
-    std::uniform_int_distribution<> total_distrib(0, maxValue/2);
+    // Define new distribution between 0 and maxValue
+    std::uniform_int_distribution<> total_distrib(0, maxValue - 1);
     
-    // random int between 0 and maxValue/2
+    // random int between 0 and maxValue
     int randomValue = total_distrib(gen);
     
-    // return + / - the random value
-    return randomValue * multiplier;
+    // return the random value
+    return randomValue;
 }

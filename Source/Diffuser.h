@@ -27,7 +27,6 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Diffuser);
     
     void invertSamples(std::vector<double>*); // second part is a multichannel inverter and/or swapper
-    void hadamardTransform(std::vector<double>*); // third part is pass multiple channels through a hadamard matrix
     
     int random_seed;
     
@@ -39,8 +38,8 @@ private:
     
     std::vector<double> audio_buffer;
     
-    // declare the hadamard object we will use
-    Householder* householder_matrix;
+    // declare a hadamard mixing matrix
+    Hadamard* hadamard_matrix;
     
     // this is the 4-channel inverter made randomly
     // start it with all non-inversions

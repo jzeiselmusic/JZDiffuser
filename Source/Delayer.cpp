@@ -32,7 +32,8 @@ Delayer::Delayer(double length, int num_channels,
     /* create delay channels */
     for (int i = 0; i < num_channels; ++i)
     {
-        double* temp = (double*)calloc(buffer_length, sizeof(double));
+        std::vector<double> temp(buffer_length);
+        std::fill(temp.begin(), temp.end(), 0.0);
         delay_channels.push_back(temp);
     }
     
@@ -42,9 +43,9 @@ Delayer::Delayer(double length, int num_channels,
     {
         std::mt19937 temp(random_seed + i);
         
-        int increment = buffer_length / 4;
+        int increment = buffer_length / num_channels;
         
-        delay_amounts.push_back(increment*(i+1) + getRandomInRange(increment, temp));
+        delay_amounts.push_back(increment*(i+1) - getRandomInRange(increment, temp));
     }
     
     
