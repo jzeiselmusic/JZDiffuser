@@ -10,7 +10,6 @@
 
 #include "Diffuser.h"
 #include "utilities.h"
-#include "Householder.h"
 #include <random>
 
 using namespace juce;
@@ -59,12 +58,5 @@ double Diffuser::processAndReturnSample(double sample)
     
     hadamard_matrix->inPlaceTransform(output);
     
-    /* output is the sum of the multichannel matrix */
-    double output_sample = 0.0;
-    for (int i = 0; i < this->size; ++i)
-    {
-        output_sample += output->at(i);
-    }
-    
-    return output_sample;
+    return output->at(0);
 }

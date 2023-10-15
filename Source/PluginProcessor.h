@@ -71,8 +71,8 @@ private:
     Diffuser diffuser_left_two = Diffuser(.05, 8, 44100.0, seed+2);
     Diffuser diffuser_right_two = Diffuser(.05, 8, 44100.0, seed+2);
     
-    Diffuser diffuser_left_three = Diffuser(.09, 8, 44100.0, seed+3);
-    Diffuser diffuser_right_three = Diffuser(.09, 8, 44100.0, seed+3);
+    Diffuser diffuser_left_three = Diffuser(.09, 4, 44100.0, seed+3);
+    Diffuser diffuser_right_three = Diffuser(.09, 4, 44100.0, seed+3);
     
     Diffuser diffuser_left_four = Diffuser(.1, 4, 44100.0, seed+4);
     Diffuser diffuser_right_four = Diffuser(.1, 4, 44100.0, seed+4);
