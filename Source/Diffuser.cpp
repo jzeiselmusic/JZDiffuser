@@ -34,6 +34,12 @@ Diffuser::Diffuser(double length, int size, double sampleRate, int rd_seed)
     this->hadamard_matrix = new Hadamard(size);
 }
 
+Diffuser::~Diffuser(void)
+{
+    delete hadamard_matrix;
+    delete delay_module;
+}
+
 void Diffuser::invertSamples(std::vector<double>* buffer)
 {
     // go through each channels current value and invert them randomly

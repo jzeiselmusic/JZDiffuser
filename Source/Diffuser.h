@@ -20,6 +20,7 @@ class Diffuser {
     
 public:
     Diffuser(double length, int size, double sampleRate, int rd_seed); // length of diffusion in seconds
+    ~Diffuser(void);
     
     std::vector<double> processDiffuserOneSample(double sample);
     std::vector<double> processDiffuserArray(std::vector<double> buffer);
