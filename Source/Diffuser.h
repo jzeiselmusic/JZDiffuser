@@ -21,7 +21,9 @@ class Diffuser {
 public:
     Diffuser(double length, int size, double sampleRate, int rd_seed); // length of diffusion in seconds
     
-    double processAndReturnSample(double sample);
+    std::vector<double> processDiffuserOneSample(double sample);
+    std::vector<double> processDiffuserArray(std::vector<double> buffer);
+    
     
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Diffuser);

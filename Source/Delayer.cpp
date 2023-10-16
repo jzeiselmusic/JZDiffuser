@@ -112,6 +112,16 @@ double Delayer::processAndReturnOneSample(double sample)
     return total / (double)num_channels;
 }
 
+void Delayer::processParallelSamples(std::vector<double>* buffer)
+{
+    for (int i = 0; i < num_channels; ++i)
+    {
+        input_audio_buffer[i] = buffer->at(i);
+    }
+    
+    delaySamples();
+}
+
 std::vector<double>* Delayer::getSamples()
 {
     return &output_audio_buffer;

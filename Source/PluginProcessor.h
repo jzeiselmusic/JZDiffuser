@@ -73,7 +73,4 @@ private:
     
     Diffuser diffuser_left_three = Diffuser(.09, 4, 44100.0, seed+3);
     Diffuser diffuser_right_three = Diffuser(.09, 4, 44100.0, seed+3);
-    
-    Diffuser diffuser_left_four = Diffuser(.1, 4, 44100.0, seed+4);
-    Diffuser diffuser_right_four = Diffuser(.1, 4, 44100.0, seed+4);
 };

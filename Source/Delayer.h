@@ -24,6 +24,7 @@ public:
     void process(double sample);
     std::vector<double>* getSamples(void);
     double processAndReturnOneSample(double sample);
+    void processParallelSamples(std::vector<double>* buffer);
     
     
 private:

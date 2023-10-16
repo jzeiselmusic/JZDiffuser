@@ -43,12 +43,7 @@ void Diffuser::invertSamples(std::vector<double>* buffer)
     }
 }
 
-/*
-    this method should be called by user,
-    should take in a sample and return an output, all while
-    updating the current state of the buffers in the diffuser system.
-*/
-double Diffuser::processAndReturnSample(double sample)
+std::vector<double> Diffuser::processDiffuserOneSample(double sample)
 {
     delay_module->process(sample);
     
@@ -58,5 +53,19 @@ double Diffuser::processAndReturnSample(double sample)
     
     hadamard_matrix->inPlaceTransform(output);
     
-    return output->at(0);
+    return *output;
+}
+
+
+std::vector<double> Diffuser::processDiffuserArray(std::vector<double> buffer)
+{
+    delay_module->processParallelSamples(&buffer);
+    
+    std::vector<double>* output = delay_module->getSamples();
+    
+    invertSamples(output);
+    
+    hadamard_matrix->inPlaceTransform(output);
+    
+    return *output;
 }
